@@ -24,7 +24,8 @@ export default function VideoCreationPanel({ courseId, question }: VideoCreation
   const [error, setError] = useState<string | null>(null);
 
   const GEMINI_API_KEY = 'AIzaSyDgShKEEeX9viEQ90JHAUBfwQqlu0c9rBw';
-  const VOICE_API_KEY = 'YOUR_VOICE_API_KEY';
+  const VOICE_API_KEY = 'YOUR_ELEVENLABS_API_KEY';
+  const VOICE_ID = 'ap2_01771851-fe5d-4e13-a843-a49b28e72ef9';
 
   const generateScript = async () => {
     setLoading('script');
@@ -77,6 +78,11 @@ Make the script conversational, engaging, and suitable for voice-over. Use simpl
 
       if (dbError) throw dbError;
 
+      await supabase
+        .from('new_questions')
+        .update({ used_in_video: 'yes' })
+        .eq('id', question.id);
+
       setVideoRecord(video);
     } catch (err: any) {
       setError(err.message);
@@ -92,9 +98,10 @@ Make the script conversational, engaging, and suitable for voice-over. Use simpl
     setError(null);
 
     try {
-      const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${VOICE_API_KEY}`, {
+      const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${VOICE_ID}`, {
         method: 'POST',
         headers: {
+          'xi-api-key': VOICE_API_KEY,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -152,9 +159,13 @@ Make the script conversational, engaging, and suitable for voice-over. Use simpl
     setError(null);
 
     try {
-      const response = await fetch('/api/generate-captions', {
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const response = await fetch(`${supabaseUrl}/functions/v1/generate-captions`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
+        },
         body: JSON.stringify({
           video_id: videoRecord.id,
           audio_url: videoRecord.audio_url,
@@ -194,9 +205,13 @@ Make the script conversational, engaging, and suitable for voice-over. Use simpl
     setError(null);
 
     try {
-      const response = await fetch('/api/render-video', {
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const response = await fetch(`${supabaseUrl}/functions/v1/render-video`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
+        },
         body: JSON.stringify({
           video_id: videoRecord.id,
           template_id: videoRecord.template_id

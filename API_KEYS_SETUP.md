@@ -2,32 +2,38 @@
 
 This document explains where to add API keys and configure the system.
 
+## CRITICAL: Database Setup Required First!
+
+Before using the application, you MUST add the `used_in_video` column to your `new_questions` table in Supabase.
+
+Run this SQL in your Supabase SQL Editor:
+
+```sql
+ALTER TABLE new_questions ADD COLUMN IF NOT EXISTS used_in_video text DEFAULT null;
+```
+
+This column tracks which questions have been used in videos to prevent duplicates.
+
 ## Required API Keys
 
 ### 1. Gemini API Key (Already Configured ✅)
 - **Current Key**: `AIzaSyDgShKEEeX9viEQ90JHAUBfwQqlu0c9rBw`
-- **Location**: `src/components/VideoCreationPanel.tsx` line 21
+- **Location**: `src/components/VideoCreationPanel.tsx` line 26
 - **Purpose**: Generates engaging educational video scripts
 - **Usage**: Script generation (Step 1 of video pipeline)
 
-### 2. Voice API Key (ElevenLabs or Similar TTS) ⚠️ REQUIRED
-- **Where to Add**: `src/components/VideoCreationPanel.tsx` line 22
-- **Current Placeholder**: `YOUR_VOICE_API_KEY`
+### 2. ElevenLabs API Key ⚠️ REQUIRED
+- **Where to Add**: `src/components/VideoCreationPanel.tsx` line 27
+- **Current Placeholder**: `YOUR_ELEVENLABS_API_KEY`
+- **Voice ID (Already Configured)**: `ap2_01771851-fe5d-4e13-a843-a49b28e72ef9`
 - **Purpose**: Text-to-speech voice-over generation
-- **Recommended Provider**: ElevenLabs (https://elevenlabs.io)
+- **Provider**: ElevenLabs (https://elevenlabs.io)
 
 #### To Get ElevenLabs API Key:
 1. Sign up at https://elevenlabs.io
 2. Go to Profile → API Keys
 3. Create new API key
-4. Replace `YOUR_VOICE_API_KEY` in line 22 with your key
-
-**IMPORTANT**: You also mentioned voice ID: `ap2_01771851-fe5d-4e13-a843-a49b28e72ef9`
-
-Update line 75 in `VideoCreationPanel.tsx`:
-```typescript
-const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/ap2_01771851-fe5d-4e13-a843-a49b28e72ef9`, {
-```
+4. Replace `YOUR_ELEVENLABS_API_KEY` in line 27 with your key
 
 ### 3. Supabase Configuration (Already Set ✅)
 - **URL**: Already in `.env` file

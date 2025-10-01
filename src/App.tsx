@@ -123,15 +123,16 @@ function App() {
       const { count } = await supabase
         .from('new_questions')
         .select('*', { count: 'exact', head: true })
-        .in('topic_id', topicIds);
+        .in('topic_id', topicIds)
+        .is('used_in_video', null);
 
       setQuestionCount(count || 0);
 
-      // Get a sample question
       const { data: question } = await supabase
         .from('new_questions')
         .select('*')
         .in('topic_id', topicIds)
+        .is('used_in_video', null)
         .limit(1)
         .maybeSingle();
 

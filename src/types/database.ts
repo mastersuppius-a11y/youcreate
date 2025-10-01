@@ -44,6 +44,7 @@ export interface Question {
   options?: string;
   answer: string;
   solution?: string;
+  used_in_video?: string | null;
 }
 
 export interface Video {
