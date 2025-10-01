@@ -19,7 +19,7 @@ function App() {
 
   const checkConnection = async () => {
     try {
-      const { data, error } = await supabase.from('exams').select('*').limit(1);
+      const { error } = await supabase.from('exams').select('*').limit(1);
 
       if (error) throw error;
 

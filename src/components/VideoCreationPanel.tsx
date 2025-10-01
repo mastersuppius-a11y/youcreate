@@ -24,7 +24,7 @@ export default function VideoCreationPanel({ courseId, question }: VideoCreation
   const [error, setError] = useState<string | null>(null);
 
   const GEMINI_API_KEY = 'AIzaSyDgShKEEeX9viEQ90JHAUBfwQqlu0c9rBw';
-  const VOICE_API_KEY = 'YOUR_ELEVENLABS_API_KEY';
+  const VOICE_API_KEY = 'sk_78d719766a3026b96c79d89fefeac203b978509b03404756';
   const VOICE_ID = 'ap2_01771851-fe5d-4e13-a843-a49b28e72ef9';
 
   const generateScript = async () => {
@@ -118,7 +118,7 @@ Make the script conversational, engaging, and suitable for voice-over. Use simpl
       const audioBlob = await response.blob();
       const audioFileName = `audio_${videoRecord.id}.mp3`;
 
-      const { data: uploadData, error: uploadError } = await supabase.storage
+      const { error: uploadError } = await supabase.storage
         .from('videos')
         .upload(audioFileName, audioBlob, {
           contentType: 'audio/mpeg',

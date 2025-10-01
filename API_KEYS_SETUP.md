@@ -4,36 +4,29 @@ This document explains where to add API keys and configure the system.
 
 ## CRITICAL: Database Setup Required First!
 
-Before using the application, you MUST add the `used_in_video` column to your `new_questions` table in Supabase.
+⚠️ **YOU MUST RUN THE DATABASE MIGRATION BEFORE USING THE APP**
 
-Run this SQL in your Supabase SQL Editor:
+See `SETUP_INSTRUCTIONS.md` for detailed step-by-step guide.
 
-```sql
-ALTER TABLE new_questions ADD COLUMN IF NOT EXISTS used_in_video text DEFAULT null;
-```
+Quick Setup:
+1. Run SQL migration in Supabase (adds required columns)
+2. Create `videos` storage bucket (public)
+3. Deploy Edge Functions
 
-This column tracks which questions have been used in videos to prevent duplicates.
+## API Keys Status
 
-## Required API Keys
-
-### 1. Gemini API Key (Already Configured ✅)
+### 1. Gemini API Key ✅ CONFIGURED
 - **Current Key**: `AIzaSyDgShKEEeX9viEQ90JHAUBfwQqlu0c9rBw`
 - **Location**: `src/components/VideoCreationPanel.tsx` line 26
 - **Purpose**: Generates engaging educational video scripts
 - **Usage**: Script generation (Step 1 of video pipeline)
 
-### 2. ElevenLabs API Key ⚠️ REQUIRED
-- **Where to Add**: `src/components/VideoCreationPanel.tsx` line 27
-- **Current Placeholder**: `YOUR_ELEVENLABS_API_KEY`
-- **Voice ID (Already Configured)**: `ap2_01771851-fe5d-4e13-a843-a49b28e72ef9`
+### 2. ElevenLabs API Key ✅ CONFIGURED
+- **Current Key**: `sk_78d719766a3026b96c79d89fefeac203b978509b03404756`
+- **Location**: `src/components/VideoCreationPanel.tsx` line 27
+- **Voice ID**: `ap2_01771851-fe5d-4e13-a843-a49b28e72ef9`
 - **Purpose**: Text-to-speech voice-over generation
 - **Provider**: ElevenLabs (https://elevenlabs.io)
-
-#### To Get ElevenLabs API Key:
-1. Sign up at https://elevenlabs.io
-2. Go to Profile → API Keys
-3. Create new API key
-4. Replace `YOUR_ELEVENLABS_API_KEY` in line 27 with your key
 
 ### 3. Supabase Configuration (Already Set ✅)
 - **URL**: Already in `.env` file
